@@ -16,7 +16,7 @@ void loop() {
   Wire.requestFrom(DS1307_CTRL_ID, 1);
   int s = Wire.read();
   // desitky sekund jsou v bite 4-6, je treba je posunout o 4 bite do prava
-  Serial.print(s >> 4);
+  Serial.print((s & 0b01110000) >> 4);
   // jednotky sekund jsou v bite 0-3, proto pouzijeme masku
   Serial.println(s & 0b00001111);
   Wire.endTransmission();
