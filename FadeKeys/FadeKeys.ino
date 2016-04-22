@@ -1,6 +1,7 @@
 #define KEY_UP		10
 #define KEY_DOWN	9
-#define LED             3
+// nutna podpora PWM na pinu
+#define LED       5
 
 int duty = 0;
 
@@ -33,7 +34,7 @@ void loop() {
       if (duty < 0) duty = 0;
     }
   }
-  
+  Serial.println(duty);
   analogWrite(LED, duty);
   delay(50);
 }

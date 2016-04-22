@@ -1,22 +1,34 @@
-const byte SCALE_VALUE[] = { B00000100, B00001100, B00011100, B00111100};
+const int SCALE_PINS[] = { 2, 3, 4, 5};
+const int SCALE_LEN = 4;
+
+// fotorezistor - A1, termistor - A0
+int senzor = A1;
 
 void setup() {
   Serial.begin(9600);
-  pinMode(A1, INPUT);
+  pinMode(senzor, INPUT);
+  
   // porty 2,3,4,5 jako vystup
-  DDRD |= B00111100;
+  for (int i = 0; i < SCALE_LEN; i++) {
+    pinMode(SCALE_PINS[i], OUTPUT);
+  }
 }
 
 void loop() {
-  int light = analogRead(A1);
+  int light = analogRead(senzor);
   Serial.println(light);
   
-  int scale = map(light, 400, 800, 0, 3);
-  Serial.println(scale);
-  
-  PORTD = B00000000;
-  // PORTD |= (B00000100 << scale);
-  PORTD |= SCALE_VALUE[scale];
+  int scale = map(light, 300, 1000, 0, 3);
+
+  // vse zhasnout
+  for (int i = 0; i < SCALE_LEN; i++) {
+    digitalWrite(SCALE_PINS[i], LOW);
+  }
+
+  // zobrazit novou hodnotu
+  for (int i = 0; i < scale+1; i++) {
+    digitalWrite(SCALE_PINS[i], HIGH);
+  }
   
   delay(200);
 }
